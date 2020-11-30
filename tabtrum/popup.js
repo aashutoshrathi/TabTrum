@@ -204,28 +204,15 @@ function stripAnimation() {
 
 function clickLaunch(snapshot_index) {
   var index = snapshot_index;
-
-  try {
-    chrome.storage.local.get(["data"], function (items) {
-      //document.write(items.data[index]);
-      tabs_to_launch = items.data[index].tablist;
-
-      for (var i = 0; i < tabs_to_launch.length; i++) {
-        var launch_url = tabs_to_launch[i].url;
-        console.log(launch_url);
-        chrome.tabs.create({ url: launch_url });
-      }
-    });
-  } catch (e) {
-    chrome.storage.local.get(["data"], function (items) {
-      tabs_to_launch = items.data[index].tablist;
-
-      for (var i = 0; i < tabs_to_launch.length; i++) {
-        var launch_url = tabs_to_launch[i].url;
-        chrome.tabs.create({ url: launch_url });
-      }
-    });
-  }
+  chrome.storage.local.get(["data"], function (items) {
+    tabs_to_launch = items.data[index].tablist;
+    for (var i = 0; i < 1; i++) {
+      var launch_url = tabs_to_launch[i].url;
+      chrome.tabs.create({ url: launch_url }, function(tab) {
+        chrome.tabs.group({ tabIds: [tab.id] });
+      });
+    }
+  });
 }
 
 function clickDelete(snapshot_delete) {
